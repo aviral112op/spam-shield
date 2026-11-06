@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spam Shield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="logo">
+        <span class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
+        </span>
+        Spam Shield
+      </span>
+      <span class="user-chip">
+        <span class="avatar" id="avatar" aria-hidden="true"></span>
+        <span class="user-email" id="user-email"></span>
+      </span>
+      <button class="btn btn-ghost" id="logout">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <h1>Check your emails</h1>
+      <p>Paste an email or upload saved messages to see if they're spam.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="panel-paste" id="tab-paste">Paste email</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-upload" id="tab-upload">Upload .eml files</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="panel-history" id="tab-history">History</button>
+    </div>
+
+    <!-- Paste -->
+    <section class="card" role="tabpanel" id="panel-paste" aria-labelledby="tab-paste">
+      <label for="email-text">Email content</label>
+      <textarea id="email-text" placeholder="Paste the subject and body of an email here…" maxlength="50000"></textarea>
+      <div class="actions">
+        <button class="btn" id="check-btn">Check email</button>
+        <span class="spinner" id="check-spinner" hidden></span>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost" id="example-spam">Try spam example</button>
+        <button class="btn btn-ghost" id="example-ham">Try normal example</button>
+      </div>
+      <p class="error" id="check-error" role="alert" hidden></p>
+
+      <div class="result" id="result" hidden aria-live="polite">
+        <div class="result-icon" id="result-icon" aria-hidden="true"></div>
+        <div class="result-body">
+          <div class="result-label" id="result-label"></div>
+          <div class="meter"><span id="result-meter"></span></div>
+          <div class="muted" id="result-confidence"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload -->
+    <section class="card" role="tabpanel" id="panel-upload" aria-labelledby="tab-upload" hidden>
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose .eml files to upload">
+        <div class="dropzone-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/><path d="M12 4v12M7 9l5-5 5 5"/></svg>
+        </div>
+        <p><strong>Choose .eml files</strong> or drag them here</p>
+        <p class="muted">Up to 20 files, 1 MB each. In Gmail use ⋮ → "Download message"; in Outlook drag an email to your desktop.</p>
+      </div>
+      <input type="file" id="file-input" accept=".eml,message/rfc822" multiple hidden>
+      <div class="actions">
+        <span class="spinner" id="upload-spinner" hidden></span>
+        <span class="muted" id="upload-status"></span>
+      </div>
+      <p class="error" id="upload-error" role="alert" hidden></p>
+
+      <div class="table-wrap" id="upload-results" hidden>
+        <table>
+          <thead><tr><th>File</th><th>Subject</th><th>Result</th><th>Confidence</th></tr></thead>
+          <tbody id="upload-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="card" role="tabpanel" id="panel-history" aria-labelledby="tab-history" hidden>
+      <p class="muted" id="history-empty" hidden>No checks yet. Results you check will show up here.</p>
+      <p class="error" id="history-error" role="alert" hidden></p>
+      <div class="table-wrap" id="history-wrap" hidden>
+        <table>
+          <thead><tr><th>When</th><th>Source</th><th>Email</th><th>Result</th><th>Confidence</th></tr></thead>
+          <tbody id="history-rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
